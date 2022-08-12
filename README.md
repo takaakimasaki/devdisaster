@@ -10,7 +10,7 @@ devaccess is a package that produces a variety of natural disaster and conflict/
 ## Installation:
 
     # Install development version from GitHub
-    remotes::install_github("takaakimasaki/devaccess")
+    remotes::install_github("takaakimasaki/devdisaster")
 
 ## Usage:
 There are currently two different functions in the package: `calc_flood_risk()` and `download_vhi_files()`. 
