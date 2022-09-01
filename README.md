@@ -19,4 +19,4 @@ There are currently three different functions in the package: `calc_flood_risk()
 
 `calc_flood_risk2()` is a variant of `calc_flood_risk()` and accommodates the second layer of flood data from https://www.fathom.global/. Fathom flood data distinguishes fluvial vis-a-vis pluvial flood and at times, users may want to combine these two different layers of flood data to generate a meausre of flood risk that accounts for both types of flood. This function is really meant for this particular purpose. 
 
-`calc_drought_vhi_risk` is a function that calculates % of drought areas (in total areas) or total sum of population using the Vegetation Health Index (https://www.star.nesdis.noaa.gov/smcd/emb/vci/VH/vh_browse.php). 
+`calc_drought_vhi_risk()` is a function that calculates % of drought areas (in total areas) or total sum of population using the Vegetation Health Index (https://www.star.nesdis.noaa.gov/smcd/emb/vci/VH/vh_browse.php). 
