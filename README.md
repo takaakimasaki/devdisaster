@@ -1,4 +1,4 @@
-# devaccess
+# devdisaster
 
 <!-- badges: start -->
 
@@ -6,7 +6,7 @@
 experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
 <!-- badges: end -->
 
-devaccess is a package that produces a variety of natural disaster and conflict/fragility measures.
+devdisaster is a package that produces a variety of natural disaster and conflict/fragility measures.
 ## Installation:
 
     # Install development version from GitHub
