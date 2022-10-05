@@ -2,7 +2,6 @@
 
 export(calc_drought_vhi_risk)
 export(calc_fathom_flood_risk)
-export(calc_fathom_flood_risk2)
 import(dplyr)
 import(sf)
 importFrom(exactextractr,exact_extract)
