@@ -12,7 +12,8 @@
 #' @export
 #' @examples
 #'\dontrun{
-#' download_vhi_files(2000,2021,output_folder)
+#' admin <- st_read(paste0("inst/extdata/moz_adm_20190607b_shp/moz_admbnda_adm1_ine_20190607.shp"))
+#' devdisaster::calc_drought_vhi_risk(admin,start_year=2001,end_year=2001,threshold=40)
 #'}
 #' @import sf dplyr
 #' @importFrom raster raster crop mask
