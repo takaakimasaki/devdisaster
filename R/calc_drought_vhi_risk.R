@@ -12,8 +12,8 @@
 #' @export
 #' @examples
 #'\dontrun{
-#' admin <- st_read(paste0("inst/extdata/moz_adm_20190607b_shp/moz_admbnda_adm1_ine_20190607.shp"))
-#' devdisaster::calc_drought_vhi_risk(admin,start_year=2001,end_year=2001,threshold=40)
+#' sf <- st_read(paste0("inst/extdata/moz_adm_20190607b_shp/moz_admbnda_adm1_ine_20190607.shp"))
+#' devdisaster::calc_drought_vhi_risk(sf,start_year=2001,end_year=2001,threshold=40)
 #'}
 #' @import sf dplyr
 #' @importFrom raster raster crop mask
@@ -27,7 +27,7 @@ calc_drought_vhi_risk <-function(sf, start_year, end_year, threshold, ag, pop, a
   # output_folder: character. folder for output
   # set timeout for downloading
   options(timeout=1000)
-
+  if(st_crs(sf)[[1]]!="WGS 84") sf <- sf %>% sf::st_transform(4326)
   # make a list of years
   year_list <- seq(start_year, end_year)
 
@@ -67,7 +67,7 @@ calc_drought_vhi_risk <-function(sf, start_year, end_year, threshold, ag, pop, a
             httr::GET(url,httr::write_disk(path=geotiff_file))
             if(n==1) {
               r <- raster(geotiff_file)%>%
-              crop(., admin) %>%
+              raster::crop(., sf) %>%
               raster::calc(function(x) ifelse(x==-9999 | x > threshold, 0, 1))
               if(ag_wt==TRUE) {
                 r <- raster::resample(r, ag, method="ngb")
@@ -82,7 +82,7 @@ calc_drought_vhi_risk <-function(sf, start_year, end_year, threshold, ag, pop, a
             }
             if(n>1) {
               r2 <- raster(geotiff_file) %>%
-                crop(., admin) %>%
+                raster::crop(., sf) %>%
                 raster::calc(function(x) ifelse(x==-9999 | x > threshold, 0, 1))
               if(ag_wt==TRUE) {
                 r2 <- raster::resample(r2, ag, method="ngb")
@@ -105,18 +105,18 @@ calc_drought_vhi_risk <-function(sf, start_year, end_year, threshold, ag, pop, a
     }
   }
   if(pop_wt==FALSE) {
-    admin <- admin %>%
+    sf <- sf %>%
       exactextractr::exact_extract(r, ., fun="mean") %>%
-      cbind(admin,.) %>%
+      cbind(sf,.) %>%
       sf::st_drop_geometry() %>%
       as.data.frame()
   }
   if(pop_wt==TRUE) {
-      admin <- admin %>%
+      sf <- sf %>%
         exactextractr::exact_extract(r, ., fun=c("sum")) %>%
-        cbind(admin,.) %>%
+        cbind(sf,.) %>%
         sf::st_drop_geometry() %>%
         as.data.frame()
     }
-  return(admin)
+  return(sf)
 }
