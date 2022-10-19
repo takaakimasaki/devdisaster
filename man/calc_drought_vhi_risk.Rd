@@ -40,7 +40,6 @@ Calculate \% of drought areas (in total areas) or total sum of population using 
 }
 \examples{
 \dontrun{
-sf <- st_read(paste0("inst/extdata/moz_adm_20190607b_shp/moz_admbnda_adm1_ine_20190607.shp"))
-devdisaster::calc_drought_vhi_risk(sf,start_year=2001,end_year=2001,threshold=40)
+calc_drought_vhi_risk(sf,start_year=2001,end_year=2001,threshold=40)
 }
 }

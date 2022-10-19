@@ -12,11 +12,11 @@
 #' @export
 #' @examples
 #'\dontrun{
-#' sf <- st_read(paste0("inst/extdata/moz_adm_20190607b_shp/moz_admbnda_adm1_ine_20190607.shp"))
-#' devdisaster::calc_drought_vhi_risk(sf,start_year=2001,end_year=2001,threshold=40)
+#' calc_drought_vhi_risk(sf,start_year=2001,end_year=2001,threshold=40)
 #'}
 #' @import sf dplyr
-#' @importFrom raster raster crop mask
+#' @importFrom terra rast crop resample
+#' @importFrom stringr str_replace
 #' @importFrom exactextractr exact_extract
 #' @importFrom httr GET
 
@@ -66,34 +66,17 @@ calc_drought_vhi_risk <-function(sf, start_year, end_year, threshold, ag, pop, a
             geotiff_file <- tempfile(fileext='.tif')
             httr::GET(url,httr::write_disk(path=geotiff_file))
             if(n==1) {
-              r <- raster(geotiff_file)%>%
-              raster::crop(., sf) %>%
-              raster::calc(function(x) ifelse(x==-9999 | x > threshold, 0, 1))
-              if(ag_wt==TRUE) {
-                r <- raster::resample(r, ag, method="ngb")
-                r <- r*ag ##only consider those areas considered to be agricultural.
-                names(r) <- paste0("vhi_",year,"_",period)
-              }
-              if(pop_wt==TRUE) {
-                r <- raster::resample(r, pop, method="ngb")
-                r <- r*pop
-              }
+              r <- terra::rast(geotiff_file) %>%
+                terra::crop(., sf) %>%
+                terra::app(function(x) ifelse(x==-9999 | x > threshold, 0, 1))
               names(r) <- paste0("vhi_",year,"_",period)
             }
             if(n>1) {
-              r2 <- raster(geotiff_file) %>%
-                raster::crop(., sf) %>%
-                raster::calc(function(x) ifelse(x==-9999 | x > threshold, 0, 1))
-              if(ag_wt==TRUE) {
-                r2 <- raster::resample(r2, ag, method="ngb")
-                r2 <- r2*ag ##only consider those areas considered to be agricultural.
-              }
-              if(pop_wt==TRUE) {
-                r2 <- raster::resample(r2, pop, method="ngb")
-                r2 <- r2*pop
-              }
+              r2 <- terra::rast(geotiff_file) %>%
+                terra::crop(., sf) %>%
+                terra::app(function(x) ifelse(x==-9999 | x > threshold, 0, 1))
               names(r2) <- paste0("vhi_",year,"_",period)
-              r <- raster::stack(r, r2)
+              r <- c(r, r2)
             }
           },
           error = function(e){
@@ -101,22 +84,38 @@ calc_drought_vhi_risk <-function(sf, start_year, end_year, threshold, ag, pop, a
             print(e)
           }
         )
+        unlink(paste0(normalizePath(tempdir()), "/", dir(tempdir())), recursive = TRUE)
       }
     }
   }
+
+  if(ag_wt==TRUE) {
+    r <- terra::resample(r, ag, method="ngb")
+    r <- r*ag ##only consider those areas considered to be agricultural.
+    names(r) <- paste0("vhi_",year,"_",period)
+
+  }
+
+  if(pop_wt==TRUE) {
+    r <- terra::resample(r, pop, method="ngb")
+    r <- r*pop ##compute total sum of pop.
+    sf <- sf %>%
+      exactextractr::exact_extract(r, ., fun=c("sum")) %>%
+      cbind(sf,.) %>%
+      sf::st_drop_geometry() %>%
+      as.data.frame() %>%
+      rename_at(vars(contains("sum.")),
+                list( ~ stringr::str_replace(., "sum.", "")))
+  }
+
   if(pop_wt==FALSE) {
     sf <- sf %>%
       exactextractr::exact_extract(r, ., fun="mean") %>%
       cbind(sf,.) %>%
       sf::st_drop_geometry() %>%
-      as.data.frame()
+      as.data.frame() %>%
+      rename_at(vars(contains("mean.")),
+                list( ~ stringr::str_replace(., "mean.", "")))
   }
-  if(pop_wt==TRUE) {
-      sf <- sf %>%
-        exactextractr::exact_extract(r, ., fun=c("sum")) %>%
-        cbind(sf,.) %>%
-        sf::st_drop_geometry() %>%
-        as.data.frame()
-    }
   return(sf)
 }

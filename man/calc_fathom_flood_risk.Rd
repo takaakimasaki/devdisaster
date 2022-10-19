@@ -25,9 +25,7 @@ Calculate flood risks using different metrics.
 }
 \examples{
 \dontrun{
-admin <- st_read(paste0("inst/extdata/moz_adm_20190607b_shp/moz_admbnda_adm1_ine_20190607.shp"))
-pop <- raster(paste0("inst/extdata/MOZ_population_v1_1_gridded.tif"))
 flood <- raster::raster(paste0("inst/extdata/fluvial_undefended/FU_1in20.tif"))
-flood_risk <- calc_flood_risk(admin, pop, flood, 0.1)
+flood_risk <- calc_flood_risk(sf, pop, flood, 0.1)
 }
 }

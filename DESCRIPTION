@@ -17,6 +17,7 @@ Imports:
     exactextractr,
     raster,
     sf,
+    terra,
     httr
 Suggests: 
     testthat (>= 3.0.0)
