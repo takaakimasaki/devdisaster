@@ -28,6 +28,7 @@ calc_drought_vhi_risk <-function(sf, start_year, end_year, threshold, ag, pop, a
   # set timeout for downloading
   options(timeout=1000)
   if(st_crs(sf)[[1]]!="WGS 84") sf <- sf %>% sf::st_transform(4326)
+
   # make a list of years
   year_list <- seq(start_year, end_year)
 
@@ -90,15 +91,15 @@ calc_drought_vhi_risk <-function(sf, start_year, end_year, threshold, ag, pop, a
   }
 
   if(ag_wt==TRUE) {
-    r <- terra::resample(r, ag, method="ngb")
-    r <- r*ag ##only consider those areas considered to be agricultural.
+    r <- terra::resample(r, rast(ag), method="near")
+    r <- r*rast(ag) ##only consider those areas considered to be agricultural.
     names(r) <- paste0("vhi_",year,"_",period)
 
   }
 
   if(pop_wt==TRUE) {
-    r <- terra::resample(r, pop, method="ngb")
-    r <- r*pop ##compute total sum of pop.
+    r <- terra::resample(r,rast(pop), method="near")
+    r <- r*rast(pop) ##compute total sum of pop.
     sf <- sf %>%
       exactextractr::exact_extract(r, ., fun=c("sum")) %>%
       cbind(sf,.) %>%
