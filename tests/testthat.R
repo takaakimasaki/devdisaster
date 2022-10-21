@@ -8,5 +8,6 @@
 
 library(testthat)
 library(devdisaster)
+library(dplyr)
 
 test_check("devdisaster")
