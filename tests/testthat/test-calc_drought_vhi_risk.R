@@ -2,7 +2,6 @@ testthat::test_that("Check if the baseline model runs.", {
   expect_equal({
     vhi <- devdisaster::calc_drought_vhi_risk(devdisaster::sf,start_year=2001,end_year=2001,threshold=40)
     dim(vhi)[2]
-    )
   }, 65)
 })
 
