@@ -5,10 +5,9 @@
 #' @param depth numeric; depth water depth used as a threshold to define flood.
 #' @param resample resample flood to match the resolution of pop; default FALSE. If set TRUE, this can take a lot of time depending on the size and resolution of pop.
 #' @export
-#' @return `calc_flood_risk2()` returns a data.frame object with row ID of admin (id), population (pop), population exposed to flood risks (flood_pop), and percent of people exposed to flood risks (flood_pop_s).
+#' @return `calc_fathom_flood_risk()` returns a data.frame object with row ID of admin (id), population (pop), population exposed to flood risks (flood_pop), and percent of people exposed to flood risks (flood_pop_s).
 #' @examples
 #'\dontrun{
-#' flood <- raster::raster(paste0("inst/extdata/fluvial_undefended/FU_1in20.tif"))
 #' flood_risk <- calc_flood_risk(sf, pop, flood, 0.1)
 #'}
 #' @import sf dplyr

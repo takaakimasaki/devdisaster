@@ -2,12 +2,12 @@
 #' @param sf object of class sf containing administrative boundaries.
 #' @param start_year object of class integer; specify the start year for which the Vegetation Health Index is loaded.
 #' @param end_year object of class integer; specify the end year for which the Vegetation Health Index is loaded.
-#' @return `load_vhi()` returns a spatRaster object with vhi_yyyy_mm where yyyy = year and mm = month.
+#' @return `load_vhi()` returns a spatRaster object of VHI data from start_year to end_year.
 
 #' @export
 #' @examples
 #'\dontrun{
-#' calc_drought_vhi_risk(sf,start_year=2001,end_year=2001,threshold=40)
+#' load_vhi(sf,start_year=2001,end_year=2001)
 #'}
 #' @import sf dplyr
 #' @importFrom terra rast crop resample
