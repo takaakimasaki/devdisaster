@@ -4,16 +4,7 @@
 \alias{calc_drought_vhi_risk}
 \title{Calculate \% of drought areas (in total areas) or total sum of population using the Vegetation Health Index (https://www.star.nesdis.noaa.gov/smcd/emb/vci/VH/vh_TechniqueBackground.php).The VH are indices, which range from 0 to 100 characterizing changes in vegetation conditions from extremely poor (0) to excellent (100). Fair conditions are coded by green color (50), which changes to brown and red when conditions deteriorate and to blue when they improve. The VH values below 40 are used for identifying vegetation stress which is an indirect drought indicator. The VH is very useful for early drought detection, assessing drought area coverage, duration, and intensity, and for monitoring drought impacts on vegetation and agricultural crops.}
 \usage{
-calc_drought_vhi_risk(
-  sf,
-  start_year,
-  end_year,
-  threshold,
-  ag,
-  pop,
-  ag_wt = FALSE,
-  pop_wt = FALSE
-)
+calc_drought_vhi_risk(sf, start_year, end_year, threshold, ag, pop)
 }
 \arguments{
 \item{sf}{object of class sf containing administrative boundaries.}
@@ -27,10 +18,6 @@ calc_drought_vhi_risk(
 \item{ag}{object of class Raster or SpatRaster; cropland classification coded 1 if a given pixel is cropland, NA otherwise.}
 
 \item{pop}{object of class Raster or SpatRaster; population raster to be used so that total number of drought affected people can be computed.}
-
-\item{ag_wt}{TRUE if analysis should be done only on agricultural land, as defined by ag.}
-
-\item{pop_wt}{TRUE if the size of population affected by droughts - instead of \% of land - should be returned.}
 }
 \value{
 \code{calc_drought_vhi_risk()} returns a data.frame object with a variable called vhi_yyyy_mm where yyyy corresponds to year and mm month. vhi_yyyy_mm reports the percent of area in drought when ag_wt=FALSE and pop_wt=FALSE; the percent of cropland in drought when ag_wt=TRUE and pop_wt=FALSE; the sum of pop in areas of drought when ag_wt=FALSE and pop_wt=TRUE; and lastly the sum of pop in cropland in drought when ag_wt=TRUE and pop_wt=TRUE.

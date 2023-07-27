@@ -14,13 +14,13 @@ load_vhi(sf, start_year, end_year)
 \item{end_year}{object of class integer; specify the end year for which the Vegetation Health Index is loaded.}
 }
 \value{
-\code{load_vhi()} returns a spatRaster object with vhi_yyyy_mm where yyyy = year and mm = month.
+\code{load_vhi()} returns a spatRaster object of VHI data from start_year to end_year.
 }
 \description{
 Load the Vegetation Health Index (https://www.star.nesdis.noaa.gov/smcd/emb/vci/VH/vh_TechniqueBackground.php).The VH are indices, which range from 0 to 100 characterizing changes in vegetation conditions from extremely poor (0) to excellent (100). Fair conditions are coded by green color (50), which changes to brown and red when conditions deteriorate and to blue when they improve. The VH values below 40 are used for identifying vegetation stress which is an indirect drought indicator. The VH is very useful for early drought detection, assessing drought area coverage, duration, and intensity, and for monitoring drought impacts on vegetation and agricultural crops.
 }
 \examples{
 \dontrun{
-calc_drought_vhi_risk(sf,start_year=2001,end_year=2001,threshold=40)
+load_vhi(sf,start_year=2001,end_year=2001)
 }
 }

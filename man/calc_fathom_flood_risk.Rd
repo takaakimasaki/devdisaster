@@ -18,14 +18,13 @@ calc_fathom_flood_risk(admin, pop, flood, depth, resample = FALSE)
 \item{resample}{resample flood to match the resolution of pop; default FALSE. If set TRUE, this can take a lot of time depending on the size and resolution of pop.}
 }
 \value{
-\code{calc_flood_risk2()} returns a data.frame object with row ID of admin (id), population (pop), population exposed to flood risks (flood_pop), and percent of people exposed to flood risks (flood_pop_s).
+\code{calc_fathom_flood_risk()} returns a data.frame object with row ID of admin (id), population (pop), population exposed to flood risks (flood_pop), and percent of people exposed to flood risks (flood_pop_s).
 }
 \description{
 Calculate flood risks using different metrics.
 }
 \examples{
 \dontrun{
-flood <- raster::raster(paste0("inst/extdata/fluvial_undefended/FU_1in20.tif"))
 flood_risk <- calc_flood_risk(sf, pop, flood, 0.1)
 }
 }

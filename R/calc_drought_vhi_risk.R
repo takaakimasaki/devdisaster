@@ -5,8 +5,6 @@
 #' @param threshold object of class numeric; specify a threshold used to define below what value of VHI is considered to be in drought. For more details on how the VHI is used to define drought conditions, see https://www.star.nesdis.noaa.gov/smcd/emb/vci/VH/vh_TechniqueBackground.php.
 #' @param pop object of class Raster or SpatRaster; population raster to be used so that total number of drought affected people can be computed.
 #' @param ag object of class Raster or SpatRaster; cropland classification coded 1 if a given pixel is cropland, NA otherwise.
-#' @param pop_wt TRUE if the size of population affected by droughts - instead of % of land - should be returned.
-#' @param ag_wt TRUE if analysis should be done only on agricultural land, as defined by ag.
 #' @return `calc_drought_vhi_risk()` returns a data.frame object with a variable called vhi_yyyy_mm where yyyy corresponds to year and mm month. vhi_yyyy_mm reports the percent of area in drought when ag_wt=FALSE and pop_wt=FALSE; the percent of cropland in drought when ag_wt=TRUE and pop_wt=FALSE; the sum of pop in areas of drought when ag_wt=FALSE and pop_wt=TRUE; and lastly the sum of pop in cropland in drought when ag_wt=TRUE and pop_wt=TRUE.
 
 #' @export
@@ -21,7 +19,7 @@
 #' @importFrom httr GET
 
 # download vhi files --------------------------------------
-calc_drought_vhi_risk <-function(sf, start_year, end_year, threshold, ag, pop, ag_wt = FALSE, pop_wt = FALSE){
+calc_drought_vhi_risk <-function(sf, start_year, end_year, threshold, ag, pop){
   # start_year: num. starting year for the range of years to get data for
   # end_year: num. ending year for the range of years to get data for
   # output_folder: character. folder for output
@@ -100,13 +98,13 @@ calc_drought_vhi_risk <-function(sf, start_year, end_year, threshold, ag, pop, a
     }
   }
 
-  if(ag_wt==TRUE) {
+  if(exists("ag")==TRUE) {
     if(class(ag)=="RasterLayer") ag <- rast(ag)
     r <- terra::resample(r, ag, method="near")
     r <- r*ag ##only consider those areas considered to be agricultural.
   }
 
-  if(pop_wt==TRUE) {
+  if(exists("pop")==TRUE) {
     if(class(pop)=="RasterLayer") pop <- rast(pop)
     r <- terra::resample(r,pop, method="near")
     r <- r*pop ##compute total sum of pop.
@@ -119,7 +117,7 @@ calc_drought_vhi_risk <-function(sf, start_year, end_year, threshold, ag, pop, a
                 list( ~ stringr::str_replace(., "sum.", "")))
   }
 
-  if(pop_wt==FALSE) {
+  if(exists("pop")==FALSE) {
     sf <- sf %>%
       exactextractr::exact_extract(r, ., fun="mean") %>%
       cbind(sf,.) %>%
