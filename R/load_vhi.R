@@ -77,7 +77,7 @@ load_vhi <-function(sf, start_year, end_year){
             }
           },
           error = function(e){
-            message(paste0("Got an for ", url))
+            message(paste0("Got an error for ", url))
             print(e)
           }
         )
