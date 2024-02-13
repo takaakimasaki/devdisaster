@@ -24,7 +24,7 @@ download_vhi <-function(start_year, end_year, output_folder){
   # end_year = 2015
   #output_folder <- paste0(dir_input,"/VHI")
   # set timeout for downloading
-  # options(timeout=5000)
+  options(timeout=5000)
 
   # make a list of years
   year_list <- seq(start_year, end_year)
