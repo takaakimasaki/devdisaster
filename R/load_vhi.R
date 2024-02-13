@@ -39,10 +39,10 @@ load_vhi <-function(sf, start_year, end_year){
       n <- n + 1
       # set Satellite ID
       satellite_id <- dplyr::case_when(
-        #(year>=1981) & (year<1985) ~ "NC",
-        #(year>=1985) & (year<1989) ~ "NF",
-        #(year>=1989) & (year<1995) ~ "NH",
-        #(year>=1995) & (year<2001) ~ "NJ",
+        (year>=1981) & (year<1985) ~ "NC",
+        (year>=1985) & (year<1989) ~ "NF",
+        (year>=1989) & (year<1995) ~ "NH",
+        (year>=1995) & (year<2001) ~ "NJ",
         (year>=2001) & (year<2004) ~ "NL",
         (year==2004) ~ "VH",
         (year==2005) & (period<24) ~ "NL",
